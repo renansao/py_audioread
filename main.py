@@ -70,11 +70,11 @@ def transformToText(audio_files):
 
     with sr.AudioFile(sound) as source:
         r.adjust_for_ambient_noise(source)
-        print("Converting Audio To Text ..... ")
-        audio = r.listen(source)
+        audio = r.record(source)
+        print("Convertendo Audio para Texto ..... ")
     
     try:
-        print("Converted Audio Is : \n" + r.recognize_google(audio, language = 'pt-PT'))
+        print("Texto convertido : \n" + r.recognize_google(audio, language = 'pt-PT'))
 
     except Exception as e:
         print(e)
