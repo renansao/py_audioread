@@ -45,6 +45,8 @@ def transformToText():
         # a frase neste exemplo era: "mas é então deixa eu te falar consegui fazer um conversor aqui"
 
         print("Texto convertido : \n" + r.recognize_google(audio, language = 'pt-PT'))
+        transformedText = r.recognize_google(audio, language = 'pt-PT')
+        return transformedText
 
     except Exception as e:
         print(e)
