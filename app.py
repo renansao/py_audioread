@@ -7,6 +7,7 @@ from transformText import transformToText
 from conversorB64toFile import conversorB64toFile
 from functools import wraps
 import jwt
+from audioAnalysis import analyseAudioService
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "RraIY0negneEQzv3XO6kwjN4XVtsul1A"
@@ -15,14 +16,10 @@ def check_for_token(func):
     @wraps(func)
     def wrapped(*args, **kwargs):
         token = request.args.get('token')
-        print(token)
         if not token:
-            print('not')
             return jsonify({'errorMessage':'Token Inválido'}), 403
         try:
-            print("ta aqui")
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
-            print('data = ' , data)
         except:
             return jsonify({'errorMessage':'Token Inválido'}), 403
         return func(*args, **kwargs)
@@ -33,6 +30,26 @@ def check_for_token(func):
 @check_for_token
 def index():
     return "Audio analysis API"
+
+@app.route('/analyseAudio', methods=['POST'])
+@check_for_token
+def analyseAudio():
+    try:
+        encodedAudio = request.json['encodedAudio']
+        audioId = request.json['audioId']
+
+        token = request.args.get('token')
+        tokenJson = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+        username = tokenJson.get('sub')
+
+        
+
+    except:
+        return jsonify({'errorMessage':'Erro ao analisar o audio'}), 400
+
+    return analyseAudioService(encodedAudio, audioId, username)
+
+
 
 
 @app.route('/convertToFile', methods=['POST'])
@@ -45,11 +62,11 @@ def conversor():
         return "Succesfully converted to file"
     else:
         return "An error occurred"
+
 @app.route('/transformToText', methods=['GET'])
 def transform():
     transformedText = transformToText()
     return transformedText
-
 
 @app.route('/read', methods=['GET'])
 def read():
