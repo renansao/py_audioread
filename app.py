@@ -57,7 +57,8 @@ def conversor():
     if (not request.json) and (not request.json['base64']):
         abort(400)
     base64 = request.json['base64']
-    converted = conversorB64toFile(base64)
+    #converted = conversorB64toFile(base64)
+    converted = True
     if converted:
         return "Succesfully converted to file"
     else:
@@ -103,4 +104,4 @@ def get_test():
     return jsonify({'task': task}), 201
 
 if __name__ == '__main__':
-    app.run(debug=True, host='localhost')
+    app.run(debug=True)
