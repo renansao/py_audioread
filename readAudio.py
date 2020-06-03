@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from glob import glob
-import librosa as lr
 import base64
 
 def readAudio(audio_files):
