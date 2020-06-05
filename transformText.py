@@ -2,6 +2,8 @@ import speech_recognition as sr
 from pydub import AudioSegment
 import os
 import argparse
+from flask import jsonify
+import json
 
 def convertAudioFiles():
     formats_to_convert = ['.m4a']
@@ -27,26 +29,41 @@ def transformToText(audioPath):
     
     r = sr.Recognizer()
 
-    with sr.AudioFile(audioPath) as source:
-        r.adjust_for_ambient_noise(source)
-        audio = r.record(source)
-        print("Convertendo Audio para Texto ..... ")
-    
     try:
-        # print(r.recognize_google(audio, language = 'pt-PT', show_all=True))
-        ### Validar se iremos utilizar o show_all - o que ele faz, retorna todas as possibilidades que encontrou na leitura além da que o algoritimo achou "mais correta"
-        #{'alternative': [{'transcript': 'mas é então deixa eu te falar consegui fazer um conversor aqui', 'confidence': 0.95794368},
-        #{'transcript': 'mas é então deixa eu te falar conseguia fazer um conversor aqui'}, 
-        #{'transcript': 'mas é então deixa eu te falar consegui fazer um conversor AC'}
-        #{'transcript': 'Pois é então deixa eu te falar consegui fazer um conversor aqui'},
-        #{'transcript': 'mas é então deixa eu te falar consegui fazer um conversor aqui ó'}],
-        #'final': True}
-        # a frase neste exemplo era: "mas é então deixa eu te falar consegui fazer um conversor aqui"
 
-        print("Texto convertido : \n" + r.recognize_google(audio, language = 'pt-PT'))
-        transformedText = r.recognize_google(audio, language = 'pt-PT')
-        return transformedText
+        with sr.AudioFile(audioPath) as source:
+            r.adjust_for_ambient_noise(source)
+            audio = r.record(source)
+            print("Convertendo Audio para Texto ..... ")
+        
+    
+            # print(r.recognize_google(audio, language = 'pt-PT', show_all=True))
+            ### Validar se iremos utilizar o show_all - o que ele faz, retorna todas as possibilidades que encontrou na leitura além da que o algoritimo achou "mais correta"
+            #{'alternative': [{'transcript': 'mas é então deixa eu te falar consegui fazer um conversor aqui', 'confidence': 0.95794368},
+            #{'transcript': 'mas é então deixa eu te falar conseguia fazer um conversor aqui'}, 
+            #{'transcript': 'mas é então deixa eu te falar consegui fazer um conversor AC'}
+            #{'transcript': 'Pois é então deixa eu te falar consegui fazer um conversor aqui'},
+            #{'transcript': 'mas é então deixa eu te falar consegui fazer um conversor aqui ó'}],
+            #'final': True}
+            # a frase neste exemplo era: "mas é então deixa eu te falar consegui fazer um conversor aqui"
+
+            print("Texto convertido : \n" + r.recognize_google(audio, language = 'pt-PT'))
+            transformedText = r.recognize_google(audio, language = 'pt-PT', show_all=True)
+            #r.recognize_bing()
+
+
+            #transformedTextJson = json.dumps(transformedText)
+            #alternativeJson = json.dumps((json.loads(transformedTextJson).get('alternative')))
+
+            #confidence = json.loads(alternativeJson).get('confidence')
+            #print('confidence = ', confidence)
+
+
+            return transformedText
+
+            
 
     except Exception as e:
         print(e)
         print("Error: ", e)
+        return jsonify({'errorMessage':str(e)}), 400

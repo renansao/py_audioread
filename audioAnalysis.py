@@ -7,6 +7,7 @@ def analyseAudioService(encodedAudio, audioId, username):
         audioPath = conversorB64toFile(encodedAudio, audioId, username)
         speech = transformToText(audioPath)
     except Exception as e:
-        print(e)
+        print("Erro no service",e)
+        return e
 
     return speech

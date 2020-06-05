@@ -44,8 +44,9 @@ def analyseAudio():
 
         
 
-    except Exception:
-        return jsonify({'errorMessage':Exception}), 400
+    except Exception as e:
+        print("exp :", e)
+        return jsonify({'errorMessage':e}), 400
         
     return analyseAudioService(encodedAudio, audioId, username)
 
