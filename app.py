@@ -44,9 +44,9 @@ def analyseAudio():
 
         
 
-    except:
-        return jsonify({'errorMessage':'Erro ao analisar o audio'}), 400
-
+    except Exception:
+        return jsonify({'errorMessage':Exception}), 400
+        
     return analyseAudioService(encodedAudio, audioId, username)
 
 
@@ -64,10 +64,10 @@ def conversor():
     else:
         return "An error occurred"
 
-@app.route('/transformToText', methods=['GET'])
-def transform():
-    transformedText = transformToText()
-    return transformedText
+#@app.route('/transformToText', methods=['GET'])
+#def transform():
+#    transformedText = transformToText()
+#    return transformedText
 
 @app.route('/read', methods=['GET'])
 def read():

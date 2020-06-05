@@ -23,12 +23,11 @@ def convertAudioFiles():
                 except:
                     print("ERROR CONVERTING " + str(filepath))
 
-def transformToText():
-    sound = "audio_file/record19.wav"
+def transformToText(audioPath):
     
     r = sr.Recognizer()
 
-    with sr.AudioFile(sound) as source:
+    with sr.AudioFile(audioPath) as source:
         r.adjust_for_ambient_noise(source)
         audio = r.record(source)
         print("Convertendo Audio para Texto ..... ")
@@ -50,4 +49,4 @@ def transformToText():
 
     except Exception as e:
         print(e)
-        print("Error: ".format(e))
+        print("Error: ", e)
