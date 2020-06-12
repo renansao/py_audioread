@@ -48,7 +48,7 @@ def transformToText(audioPath):
             # a frase neste exemplo era: "mas é então deixa eu te falar consegui fazer um conversor aqui"
 
             print("Texto convertido : \n" + r.recognize_google(audio, language = 'pt-PT'))
-            transformedText = r.recognize_google(audio, language = 'pt-PT', show_all=True)
+            transformedText = r.recognize_google(audio, language = 'pt-PT')
             #r.recognize_bing()
 
 
@@ -59,7 +59,7 @@ def transformToText(audioPath):
             #print('confidence = ', confidence)
 
 
-            return transformedText
+            return jsonify({"speech":transformedText})
 
             
 
