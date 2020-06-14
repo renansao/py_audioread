@@ -70,7 +70,7 @@ def transformToText(audioPath):
         return jsonify({'errorMessage':str(e)}), 400
 
 def read_cloud_credentials():
-    file = open("google-cloud-credentials.json", "r")
+    file = open("credentials.json", "r")
     data = file.read()
     file.close()
     return data
