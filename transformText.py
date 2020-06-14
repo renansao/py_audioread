@@ -46,7 +46,8 @@ def transformToText(audioPath):
             #{'transcript': 'mas é então deixa eu te falar consegui fazer um conversor aqui ó'}],
             #'final': True}
             # a frase neste exemplo era: "mas é então deixa eu te falar consegui fazer um conversor aqui"
-
+            credentials = read_cloud_credentials()
+            print(r.recognize_google_cloud(audio, credentials_json=credentials, language="pt-BR", show_all=True))
             print("Texto convertido : \n" + r.recognize_google(audio, language = 'pt-PT'))
             transformedText = r.recognize_google(audio, language = 'pt-PT')
             #r.recognize_bing()
@@ -67,3 +68,9 @@ def transformToText(audioPath):
         print(e)
         print("Error: ", e)
         return jsonify({'errorMessage':str(e)}), 400
+
+def read_cloud_credentials():
+    file = open("google-cloud-credentials.json", "r")
+    data = file.read()
+    file.close()
+    return data
