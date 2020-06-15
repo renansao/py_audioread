@@ -5,9 +5,9 @@ import argparse
 from flask import jsonify
 import json
 
-def convertAudioFiles(audioPath):
+def convertAudioFiles(audioDir):
     formats_to_convert = ['.m4a']
-    for (dirpath, dirnames, filenames) in os.walk("audio_file/matheusgancedo@gmail.com"):
+    for (dirpath, dirnames, filenames) in os.walk(audioDir):
         for filename in filenames:
             if filename.endswith(tuple(formats_to_convert)):
 

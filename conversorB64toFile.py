@@ -21,7 +21,7 @@ def conversorB64toFile(encodedAudio, audioId, username):
         decode_string = base64.b64decode(encodedAudio)
         wav_file.write(decode_string)
 
-        return audioPath
+        return audioPath, path
     except Exception as e:
         print(e)
         return e
