@@ -7,7 +7,6 @@ import json
 import sys
 sys.path.append("/app/ffmpeg")
 import ffmpeg
-import ffprobe
 AudioSegment.converter = "/app/ffmpeg/bin/ffmpeg.exe"
 AudioSegment.ffmpeg = "/app/ffmpeg/bin/ffmpeg.exe"
 AudioSegment.ffprobe = "/app/ffmpeg/bin/ffprobe.exe"
