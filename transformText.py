@@ -5,7 +5,7 @@ import argparse
 from flask import jsonify
 import json
 import sys
-sys.path.append("/app/ffmpeg")
+sys.path.append("/app/ffmpeg/bin")
 import ffmpeg
 AudioSegment.converter = "/app/ffmpeg/bin/ffmpeg.exe"
 AudioSegment.ffmpeg = "/app/ffmpeg/bin/ffmpeg.exe"
