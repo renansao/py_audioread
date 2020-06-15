@@ -5,9 +5,9 @@ import argparse
 from flask import jsonify
 import json
 
-def convertAudioFiles():
+def convertAudioFiles(audioPath):
     formats_to_convert = ['.m4a']
-    for (dirpath, dirnames, filenames) in os.walk("audio_file/"):
+    for (dirpath, dirnames, filenames) in os.walk("audio_file/matheusgancedo@gmail.com"):
         for filename in filenames:
             if filename.endswith(tuple(formats_to_convert)):
 
@@ -21,6 +21,7 @@ def convertAudioFiles():
                     wav_path = dirpath + '/' + wav_filename
                     print('CONVERTING: ' + str(filepath))
                     file_handle = track.export(wav_path, format='wav')
+                    print(filepath)
                     os.remove(filepath)
                 except:
                     print("ERROR CONVERTING " + str(filepath))
@@ -29,7 +30,11 @@ def transformToText(audioPath):
     
     r = sr.Recognizer()
 
+    audioPath = audioPath[:-4]
+    audioPath = audioPath + ".wav"
+
     try:
+        convertAudioFiles(audioPath)
 
         with sr.AudioFile(audioPath) as source:
             r.adjust_for_ambient_noise(source)
@@ -46,12 +51,11 @@ def transformToText(audioPath):
             #{'transcript': 'mas é então deixa eu te falar consegui fazer um conversor aqui ó'}],
             #'final': True}
             # a frase neste exemplo era: "mas é então deixa eu te falar consegui fazer um conversor aqui"
-            credentials = read_cloud_credentials()
-            print(r.recognize_google_cloud(audio, credentials_json=credentials, language="pt-BR", show_all=True))
+
             print("Texto convertido : \n" + r.recognize_google(audio, language = 'pt-PT'))
             transformedText = r.recognize_google(audio, language = 'pt-PT')
             #r.recognize_bing()
-
+            
 
             #transformedTextJson = json.dumps(transformedText)
             #alternativeJson = json.dumps((json.loads(transformedTextJson).get('alternative')))
@@ -68,9 +72,3 @@ def transformToText(audioPath):
         print(e)
         print("Error: ", e)
         return jsonify({'errorMessage':str(e)}), 400
-
-def read_cloud_credentials():
-    file = open("credentials.json", "r")
-    data = file.read()
-    file.close()
-    return data
