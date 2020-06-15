@@ -36,6 +36,7 @@ def index():
 def analyseAudio():
     try:
         encodedAudio = request.json['encodedAudio']
+        print("Base64: ", encodedAudio)
         audioId = request.json['audioId']
 
         token = request.args.get('token')

@@ -23,8 +23,9 @@ def convertAudioFiles(audioDir):
                     file_handle = track.export(wav_path, format='wav')
                     print(filepath)
                     os.remove(filepath)
-                except:
+                except Exception as e:
                     print("ERROR CONVERTING " + str(filepath))
+                    print(e)
 
 def transformToText(audioPath):
     
