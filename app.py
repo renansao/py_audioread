@@ -8,6 +8,8 @@ from conversorB64toFile import conversorB64toFile
 from functools import wraps
 import jwt
 from audioAnalysis import analyseAudioService
+import sys
+sys.path.append("/app/ffmpeg")
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "RraIY0negneEQzv3XO6kwjN4XVtsul1A"
