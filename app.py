@@ -60,8 +60,8 @@ def conversor():
     if (not request.json) and (not request.json['base64']):
         abort(400)
     base64 = request.json['base64']
-    #converted = conversorB64toFile(base64)
-    converted = True
+    converted = conversorB64toFile(base64)
+    #converted = True
     if converted:
         return "Succesfully converted to file"
     else:
