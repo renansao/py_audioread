@@ -18,11 +18,11 @@ def conversorB64toFile(encodedAudio, audioId, username):
         else:
             print ("Successfully created the directory %s " % path)
         
-        wav_file = open(audioPath, "wb")
+        wav_file = open(path, "wb")
         decode_string = base64.b64decode(encodedAudio)
         wav_file.write(decode_string)
 
-        return audioPath, path
+        return path, path
     except Exception as e:
         print(e)
         return e
