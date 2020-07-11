@@ -4,8 +4,9 @@ import os
 def conversorB64toFile(encodedAudio, audioId, username):
 
     audioName = audioId + ".m4a"
-    path = "audio_file/"+ username
-    audioPath = "audio_file/"+ username + "/" + audioName
+    path = "audio_file/"+ audioName
+    # path = "audio_file/"+ username
+    # audioPath = "audio_file/"+ username + "/" + audioName
     #audioPath = "audio_file/" + audioName
 
     try:
@@ -17,7 +18,7 @@ def conversorB64toFile(encodedAudio, audioId, username):
         else:
             print ("Successfully created the directory %s " % path)
         
-        wav_file = open(audioName, "wb")
+        wav_file = open(audioPath, "wb")
         decode_string = base64.b64decode(encodedAudio)
         wav_file.write(decode_string)
 
