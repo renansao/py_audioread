@@ -56,11 +56,18 @@ def analyseAudio():
 
 
 @app.route('/convertToFile', methods=['POST'])
+@check_for_token
 def conversor():
     if (not request.json) and (not request.json['base64']):
         abort(400)
+    
     base64 = request.json['base64']
-    converted = conversorB64toFile(base64)
+    audioId = request.json['audioId']
+    token = request.args.get('token')
+    tokenJson = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+    username = tokenJson.get('sub')
+    
+    converted = conversorB64toFile(base64, audioId, username)
     #converted = True
     if converted:
         return "Succesfully converted to file"
