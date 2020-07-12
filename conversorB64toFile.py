@@ -6,7 +6,6 @@ def conversorB64toFile(encodedAudio, audioId, username):
     audioName = audioId + ".m4a"
     path = "audio_file/"+ username
     audioPath = "audio_file/"+ username + "/" + audioName
-    #audioPath = "audio_file/" + audioName
 
     try:
         os.open
