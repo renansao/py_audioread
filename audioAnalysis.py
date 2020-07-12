@@ -10,6 +10,6 @@ def analyseAudioService(encodedAudio, audioId, username):
         speech = transformToText(audioPath)
     except Exception as e:
         print("Erro no service",e)
-        return e
+        return "Falha na analise do audio"
 
     return speech
