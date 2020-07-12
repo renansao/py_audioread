@@ -4,9 +4,8 @@ import os
 def conversorB64toFile(encodedAudio, audioId, username):
 
     audioName = audioId + ".m4a"
-    path = "audio_file/"+ audioName
-    # path = "audio_file/"+ username
-    # audioPath = "audio_file/"+ username + "/" + audioName
+    path = "audio_file/"+ username
+    audioPath = "audio_file/"+ username + "/" + audioName
     #audioPath = "audio_file/" + audioName
 
     try:
@@ -22,7 +21,7 @@ def conversorB64toFile(encodedAudio, audioId, username):
         decode_string = base64.b64decode(encodedAudio)
         wav_file.write(decode_string)
 
-        return path, path
+        return audioPath, path
     except Exception as e:
         print(e)
-        return e
+        return "Falha ao converter Base 64"
