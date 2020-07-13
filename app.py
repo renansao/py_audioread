@@ -28,7 +28,6 @@ def check_for_token(func):
 
 
 @app.route('/', methods=['GET'])
-@check_for_token
 def index():
     return "Audio analysis API"
 
@@ -51,9 +50,6 @@ def analyseAudio():
         return jsonify({'errorMessage':e}), 400
         
     return analyseAudioService(encodedAudio, audioId, username)
-
-
-
 
 @app.route('/convertToFile', methods=['POST'])
 @check_for_token
