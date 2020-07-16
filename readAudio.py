@@ -7,7 +7,7 @@ import base64
 from matplotlib.backends.backend_pdf import PdfPages
 from pdfFile import generatePDF
 
-def readAudio(audio_files):
+def readAudio(audio_files, words, speech, audioName, audioDate):
 
     # print(len(audio_files))
     try:
@@ -41,7 +41,7 @@ def readAudio(audio_files):
             plt.title("Gráfico do Audio", fontdict={'fontsize': 25, 'fontweight': 'bold'})
             pdf.savefig()
 
-        generatePDF(time, audio, max(audio), list(time)[list(audio).index(max(audio))], min(audio), list(time)[list(audio).index(min(audio))], totalTime)
+        generatePDF(time, audio, max(audio), list(time)[list(audio).index(max(audio))], min(audio), list(time)[list(audio).index(min(audio))], totalTime, words, speech, audioName, audioDate)
 
     except Exception as e:
         print("Analysis Error:",e)

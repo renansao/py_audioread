@@ -29,6 +29,23 @@ def check_for_token(func):
 
 @app.route('/', methods=['GET'])
 def index():
+    return readAudio('teste', {
+    "words": [
+        {
+            "endTime": "1.700s",
+            "startTime": "0.800s",
+            "word": "Renan"
+        },
+        {
+            "endTime": "2s",
+            "startTime": "1.700s",
+            "word": "Tô"
+        },
+    ]
+    }, 
+    "Renan Tô testando agora e tem que funcionar se parar é porque você é ruim",
+    "TESTE", 
+    "13/07/2020")
     return "Audio analysis API"
 
 @app.route('/analyseAudio', methods=['POST'])
@@ -64,17 +81,26 @@ def conversor():
     username = tokenJson.get('sub')
     
     converted = conversorB64toFile(base64, audioId, username)
-    #converted = True
     if converted:
         return "Succesfully converted to file"
     else:
         return "An error occurred"
 
 @app.route('/read', methods=['GET'])
-def read():
-    data_dir = 'audio_file'
-    audio_files = glob(data_dir + '/*.wav')
-    return readAudio(audio_files)
+def generatePDF():
+    if (not request.json) and (not request.json['audioId']):
+        abort(400)
+    
+    audioId = request.json['audioId']
+    audioName = request.json['audioName']
+    words = request.json['words']
+    audioDate = request.json['informationDate']
+
+    token = request.args.get('token')
+    tokenJson = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+    username = tokenJson.get('sub')
+
+    return readAudio(audio_files, words, audioName, audioDate)
 
 if __name__ == '__main__':
     app.run(debug=True)

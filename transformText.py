@@ -43,22 +43,12 @@ def transformToText(audioPath):
             r.adjust_for_ambient_noise(source)
             audio = r.record(source)
             print("Convertendo Audio para Texto ..... ")
-        
-    
-            # print(r.recognize_google(audio, language = 'pt-PT', show_all=True))
-            ### Validar se iremos utilizar o show_all - o que ele faz, retorna todas as possibilidades que encontrou na leitura além da que o algoritimo achou "mais correta"
-            #{'alternative': [{'transcript': 'mas é então deixa eu te falar consegui fazer um conversor aqui', 'confidence': 0.95794368},
-            #{'transcript': 'mas é então deixa eu te falar conseguia fazer um conversor aqui'}, 
-            #{'transcript': 'mas é então deixa eu te falar consegui fazer um conversor AC'}
-            #{'transcript': 'Pois é então deixa eu te falar consegui fazer um conversor aqui'},
-            #{'transcript': 'mas é então deixa eu te falar consegui fazer um conversor aqui ó'}],
-            #'final': True}
-            # a frase neste exemplo era: "mas é então deixa eu te falar consegui fazer um conversor aqui"
-
-            print("Texto convertido : \n" + r.recognize_google(audio, language = 'pt-PT'))
-            transformedText = r.recognize_google(audio, language = 'pt-PT')
-            #r.recognize_bing()
             
+            with open(r"credentials.json", "r") as f:
+                credentials_json = f.read()
+                result = r.recognize_google_cloud(audio,credentials_json=credentials_json,language="pt-BR",show_all=True)
+                words = result['results'][0]['alternatives'][0]['words']
+                transformedText = result['results'][0]['alternatives'][0]['transcript']
 
             #transformedTextJson = json.dumps(transformedText)
             #alternativeJson = json.dumps((json.loads(transformedTextJson).get('alternative')))
@@ -67,7 +57,7 @@ def transformToText(audioPath):
             #print('confidence = ', confidence)
 
 
-            return jsonify({"speech":transformedText})
+            return (jsonify({"speech":transformedText, "words": words}))
 
             
 
