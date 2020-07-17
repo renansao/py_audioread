@@ -43,7 +43,7 @@ def index():
         },
     ]
     }, 
-    "Renan Tô testando agora e tem que funcionar se parar é porque você é ruim",
+    "Renan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim",
     "TESTE", 
     "13/07/2020")
     return "Audio analysis API"
@@ -94,13 +94,14 @@ def generatePDF():
     audioId = request.json['audioId']
     audioName = request.json['audioName']
     words = request.json['words']
+    speech = request.json['speech']
     audioDate = request.json['informationDate']
 
     token = request.args.get('token')
     tokenJson = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
     username = tokenJson.get('sub')
 
-    return readAudio(audio_files, words, audioName, audioDate)
+    return readAudio("", words, speech, audioName, audioDate)
 
 if __name__ == '__main__':
     app.run(debug=True)

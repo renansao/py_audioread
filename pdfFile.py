@@ -56,38 +56,11 @@ def generatePDF(time, audio, maxAmp, maxAmpTime, minAmp, minAmpTime, totalTime, 
         data.insert(0, ("Palavra", "Tempo de Início\n(segundos)", "Tempo de fim\n(segundos)"))
 
         table = generateTable(data)
-        words = table.split(10, (speechy-50))
-        speechY2 = speechy
-        wordsListR = []
-
-        if(len(words) > 1):
-            wordsListR = words[1].split(10, (speechy-50))
-            for i in range (len(wordsListR[0]._rowHeights)):
-                speechY2 -= 32
-
-        for i in range (len(words[0]._rowHeights)):
-            speechy -= 32
-
-        words[0].wrapOn(pdf, 0,0)
-        words[0].drawOn(pdf, 17, speechy)
+        newPdfs = generateNewPDF(table, 0, [], (speechy-50), (speechy- 20), pdf, True)
         
-        if(len(words) > 1):
-            wordsListR[0].wrapOn(pdf, 0,0)
-            wordsListR[0].drawOn(pdf, 320, speechY2)
-
-        pdf.save()
-
-        if (len(wordsListR) > 1):
-            newPdfs = generateSecondPDF(wordsListR[1], 2, [])
-            pdf_paths = ["Relatorio.pdf"] 
-            for pdf in newPdfs:
-                pdf_paths.append(pdf)
-            pdf_paths.append("audioGraf.pdf")
-        else:
-            pdf_paths = ["Relatorio.pdf", "audioGraf.pdf"]
-        print(pdf_paths)
         pdf_writer = PdfFileWriter()
-        for path in pdf_paths:
+        newPdfs.append("audioGraf.pdf")
+        for path in newPdfs:
             pdf_reader = PdfFileReader(path)
             for page in range(pdf_reader.getNumPages()):
                 pdf_writer.addPage(pdf_reader.getPage(page))
@@ -109,23 +82,24 @@ def generateTable(data):
   ]))
   return table
 
-def generateSecondPDF(table, number, pdfs):
-    pdfName = f'Relatorio{number}.pdf'
+def generateNewPDF(table, number, pdfs, tablesplit, speechy, pdf, newPdf):
+    if(newPdf == False):
+        pdfName = f'Relatorio{number}.pdf'
+    else:
+        pdfName = 'Relatorio.pdf'
     pdfs.append(pdfName)
-    pdf = Canvas(pdfName, pagesize=LETTER)
     wordsListR = []
-
-    words = table.split(10, int(A4 - 100))
-    speechy = int(A4 - 30)
+    words = table.split(10, tablesplit)
     speechY2 = speechy
 
     if(len(words) > 1):
-        wordsListR = words[1].split(10, int(A4 - 100))
+        wordsListR = words[1].split(10, tablesplit)
         for i in range (len(wordsListR[0]._rowHeights)):
-            speechY2 -= 32
+            speechY2 -= 30
 
     for i in range (len(words[0]._rowHeights)):
-        speechy -= 32
+        speechy -= 30
+
 
     words[0].wrapOn(pdf, 0,0)
     words[0].drawOn(pdf, 17, speechy)
@@ -133,10 +107,11 @@ def generateSecondPDF(table, number, pdfs):
     if(len(words) > 1):
         wordsListR[0].wrapOn(pdf, 0,0)
         wordsListR[0].drawOn(pdf, 320, speechY2)
-
     pdf.save()
 
     if(len(wordsListR) > 1):
         number += 1
-        generateSecondPDF(wordsListR[1], number, pdfs)
+        nextPDFName = f"Relatorio{str(number)}.pdf"
+        generateNewPDF(wordsListR[1], number, pdfs, (int(A4) - 100), 770, Canvas(nextPDFName, pagesize=LETTER), False)
+
     return pdfs
