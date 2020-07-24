@@ -1,13 +1,12 @@
-from reportlab.lib.colors import blue
 from reportlab.lib.pagesizes import LETTER, A4
-from reportlab.lib.units import inch
 from reportlab.pdfgen.canvas import Canvas
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from datetime import datetime
 from reportlab.lib import colors
 from reportlab.platypus.tables import Table
 from textwrap import wrap
-import numpy
+import boto3
+from botocore.client import Config
 
 def generatePDF(time, audio, maxAmp, maxAmpTime, minAmp, minAmpTime, totalTime, datas, speech, audioName, audioDate):
     data = []
@@ -64,9 +63,10 @@ def generatePDF(time, audio, maxAmp, maxAmpTime, minAmp, minAmpTime, totalTime, 
             pdf_reader = PdfFileReader(path)
             for page in range(pdf_reader.getNumPages()):
                 pdf_writer.addPage(pdf_reader.getPage(page))
-        with open("ApneaSleep - Relatório.pdf", "wb") as fh:
+        with open(f"Relatorio-{audioName}.pdf", "wb") as fh:
             pdf_writer.write(fh)
             print("PDF Gerado com sucesso")
+        savePDFS3(open(f'Relatorio-{audioName}.pdf', 'rb'), audioName)
     except Exception as e:
         print(e)
         return 'Erro ao gerar PDF'
@@ -115,3 +115,17 @@ def generateNewPDF(table, number, pdfs, tablesplit, speechy, pdf, newPdf):
         generateNewPDF(wordsListR[1], number, pdfs, (int(A4) - 100), 770, Canvas(nextPDFName, pagesize=LETTER), False)
 
     return pdfs
+
+def savePDFS3(data, audioName):
+    try:
+        s3 = boto3.resource(
+            's3',
+            aws_access_key_id= 'AKIAJD6RDWLOPWDQBHRA',
+            aws_secret_access_key= '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',
+            config=Config(signature_version='s3v4')
+        )
+        s3.Bucket('apneasleepfiles').put_object(Key=f"Relatorio-{audioName}.pdf", Body=data)
+        # obj = s3.Object("apneasleepfiles", f"relatorio-{audioName}.pdf")
+        # obj.delete()
+    except Exception as e:
+        print(e)

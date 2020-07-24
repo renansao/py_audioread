@@ -6,12 +6,22 @@ from glob import glob
 import base64
 from matplotlib.backends.backend_pdf import PdfPages
 from pdfFile import generatePDF
+import boto3
+from botocore.client import Config
 
 def readAudio(audio_files, words, speech, audioName, audioDate):
 
     # print(len(audio_files))
     try:
-        audio, sfreq = lr.load("audio_file/record7.m4a") 
+        s3 = boto3.client(
+            's3',
+            aws_access_key_id= 'AKIAJD6RDWLOPWDQBHRA',
+            aws_secret_access_key= '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',
+            config=Config(signature_version='s3v4')
+        )
+        s3.download_file('apneasleepfiles', 'record7.m4a', 'audio_file/teste.m4a')
+
+        audio, sfreq = lr.load("audio_file/teste.m4a") 
         totalTime = lr.get_duration(y=audio, sr=sfreq)
 
         # print("audio file : ", audio_files[4])
