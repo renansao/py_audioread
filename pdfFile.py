@@ -118,13 +118,6 @@ def generateNewPDF(table, number, pdfs, tablesplit, speechy, pdf, newPdf):
 
 def savePDFS3(data, audioName):
     try:
-        s3 = boto3.resource(
-            's3',
-            aws_access_key_id= 'AKIAJD6RDWLOPWDQBHRA',
-            aws_secret_access_key= '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',
-            config=Config(signature_version='s3v4')
-        )
-        s3.Bucket('apneasleepfiles').put_object(Key=f"Relatorio-{audioName}.pdf", Body=data)
         # obj = s3.Object("apneasleepfiles", f"relatorio-{audioName}.pdf")
         # obj.delete()
     except Exception as e:

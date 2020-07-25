@@ -13,13 +13,6 @@ def readAudio(audio_files, words, speech, audioName, audioDate):
 
     # print(len(audio_files))
     try:
-        s3 = boto3.client(
-            's3',
-            aws_access_key_id= 'AKIAJD6RDWLOPWDQBHRA',
-            aws_secret_access_key= '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',
-            config=Config(signature_version='s3v4')
-        )
-        s3.download_file('apneasleepfiles', 'record7.m4a', 'audio_file/teste.m4a')
         
         with open("audio_file/teste.m4a", "wb") as fh:
             print("TA LENDO")
