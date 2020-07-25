@@ -20,6 +20,9 @@ def readAudio(audio_files, words, speech, audioName, audioDate):
             config=Config(signature_version='s3v4')
         )
         s3.download_file('apneasleepfiles', 'record7.m4a', 'audio_file/teste.m4a')
+        
+        with open("audio_file/teste.m4a", "wb") as fh:
+            print("TA LENDO")
 
         audio, sfreq = lr.load("audio_file/teste.m4a") 
         totalTime = lr.get_duration(y=audio, sr=sfreq)
