@@ -50,9 +50,10 @@ def convertEncodedAudioToBytes(encodedAudio):
     sound2.export(wav, format="wav")
 
     for bucket in s3.buckets.all():
-        bucket.put_object(Key="users/audiofileHEROKU.m4a", Body=audioFile.getvalue())
         bucket.put_object(Key="users/audiofileHEROKU.wav", Body=wav.getvalue())
+        bucket.put_object(Key="users/audiofileHEROKU.m4a", Body=audioFile.getvalue())
     wav.close()
+    audioFile.close()
 
     return "ok"
 
