@@ -4,6 +4,18 @@ import io
 from pydub import AudioSegment
 import boto3
 
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+
+print(AWS_ACCESS_KEY_ID)
+print(AWS_SECRET_ACCESS_KEY)
+
+s3 = boto3.resource(
+    "s3",
+    aws_access_key_id=AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=AWS_SECRET_ACCESS_KEY
+    )
+
 def conversorB64toFile(encodedAudio, audioId, username):
 
     audioName = audioId + ".m4a"
@@ -36,6 +48,17 @@ def convertEncodedAudioToBytes(encodedAudio):
     f = open("audio_file/testeee22.m4a", "wb")
     f.write(audioFile.getbuffer())
     f.close()
+    
+    wav = io.BytesIO()
+    sound2 = AudioSegment.from_file(audioFile, "m4a")
+    sound2.export(wav, format="wav")
+
+    f = open("audio_file/testeee22.m4a", "r")
+    for bucket in s3.buckets.all():
+        bucket.put_object(Key="users/audiofileHEROKU.m4a", Body=audioFile.getvalue())
+        bucket.put_object(Key="users/audiofileHEROKU.wav", Body=wav.getvalue())
+    f.close()
+    wav.close()
 
     return audioFile
 
