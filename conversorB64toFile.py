@@ -18,7 +18,7 @@ s3 = boto3.resource(
 
 def saveAudioToS3(encodedAudio, username, audioId):
 
-    audioKey = generateKey("audio", username, audioId)
+    audioKey = generateAudioKey(username, audioId, ".wav")
 
     decodedAudio = base64.b64decode(encodedAudio)
     audioFile = io.BytesIO(decodedAudio)
@@ -34,9 +34,9 @@ def saveAudioToS3(encodedAudio, username, audioId):
     audioFile.close()
     return
 
-def generateKey(root, username, audioId):
+def generateAudioKey(username, audioId, extension):
 
-    key = "user/" + root + "/" + username + "/" + audioId
+    key = "user/" + "audio" + "/" + username + "/" + audioId + extension
     return key
 
 def conversorB64toFile(encodedAudio, audioId, username):
