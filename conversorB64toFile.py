@@ -16,6 +16,29 @@ s3 = boto3.resource(
     aws_secret_access_key=AWS_SECRET_ACCESS_KEY
     )
 
+def saveAudioToS3(encodedAudio, username, audioId):
+
+    audioKey = generateKey("audio", username, audioId)
+
+    decodedAudio = base64.b64decode(encodedAudio)
+    audioFile = io.BytesIO(decodedAudio)
+
+    wav = io.BytesIO()
+    sound2 = AudioSegment.from_file(audioFile, "m4a")
+    sound2.export(wav, format="wav")
+
+    for bucket in s3.buckets.all():
+        bucket.put_object(Key=audioKey, Body=wav.getvalue())
+        #bucket.put_object(Key="users/audiofileHEROKU.m4a", Body=audioFile.getvalue())
+    wav.close()
+    audioFile.close()
+    return
+
+def generateKey(root, username, audioId):
+
+    key = "user/" + root + "/" + username + "/" + audioId
+    return key
+
 def conversorB64toFile(encodedAudio, audioId, username):
 
     audioName = audioId + ".m4a"
@@ -51,7 +74,7 @@ def convertEncodedAudioToBytes(encodedAudio):
 
     for bucket in s3.buckets.all():
         bucket.put_object(Key="users/audiofileHEROKU.wav", Body=wav.getvalue())
-        bucket.put_object(Key="users/audiofileHEROKU.m4a", Body=audioFile.getvalue())
+        #bucket.put_object(Key="users/audiofileHEROKU.m4a", Body=audioFile.getvalue())
     wav.close()
     audioFile.close()
 
