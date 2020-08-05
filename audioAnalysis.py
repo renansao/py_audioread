@@ -9,7 +9,7 @@ def analyseAudioService(encodedAudio, audioId, username):
         #convertAudioFiles(audioDir)
         #speech = transformToText(audioPath)
 
-        saveAudioToS3(encodedAudio)
+        saveAudioToS3(encodedAudio, username, audioId)
 
         m4aAudioBytes = convertEncodedAudioToBytes(encodedAudio)
         #wavAudioBytes = convertM4AToWavBytes(m4aAudioBytes)
