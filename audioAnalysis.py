@@ -10,7 +10,7 @@ def analyseAudioService(encodedAudio, audioId, username):
         #speech = transformToText(audioPath)
 
         m4aAudioBytes = convertEncodedAudioToBytes(encodedAudio)
-        wavAudioBytes = convertM4AToWavBytes(m4aAudioBytes)
+        #wavAudioBytes = convertM4AToWavBytes(m4aAudioBytes)
         print(m4aAudioBytes)
 
     except Exception as e:

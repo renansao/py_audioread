@@ -45,19 +45,13 @@ def convertEncodedAudioToBytes(encodedAudio):
     decodedAudio = base64.b64decode(encodedAudio)
     audioFile = io.BytesIO(decodedAudio)
 
-    f = open("audio_file/testeee22.m4a", "wb")
-    f.write(audioFile.getbuffer())
-    f.close()
-    
     wav = io.BytesIO()
     sound2 = AudioSegment.from_file(audioFile, "m4a")
     sound2.export(wav, format="wav")
 
-    f = open("audio_file/testeee22.m4a", "r")
     for bucket in s3.buckets.all():
         bucket.put_object(Key="users/audiofileHEROKU.m4a", Body=audioFile.getvalue())
         bucket.put_object(Key="users/audiofileHEROKU.wav", Body=wav.getvalue())
-    f.close()
     wav.close()
 
     return audioFile
