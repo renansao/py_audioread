@@ -14,7 +14,8 @@ def analyseAudioService(encodedAudio, audioId, username):
         print(m4aAudioBytes)
 
     except Exception as e:
-        print("Erro no service",e)
-        return "Falha na analise do audio"
+        print("Erro no service: ", e)
+        print(e.with_traceback())
+        return e
 
     return "speech"

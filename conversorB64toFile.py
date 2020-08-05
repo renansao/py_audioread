@@ -54,7 +54,7 @@ def convertEncodedAudioToBytes(encodedAudio):
         bucket.put_object(Key="users/audiofileHEROKU.wav", Body=wav.getvalue())
     wav.close()
 
-    return audioFile
+    return "ok"
 
 def convertM4AToWavBytes(m4aBytes):
     try:
