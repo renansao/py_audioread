@@ -17,8 +17,8 @@ def convertAudioFiles(audioDir):
                 (path, file_extension) = os.path.splitext(filepath)
                 file_extension_final = file_extension.replace('.', '')
                 try:
-                    track = AudioSegment.from_file(filepath,
-                            file_extension_final)
+                    track = AudioSegment.from_file(filepath, file_extension_final)
+                    
                     wav_filename = filename.replace(file_extension_final, 'wav')
                     wav_path = dirpath + '/' + wav_filename
                     print('CONVERTING: ' + str(filepath))

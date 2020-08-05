@@ -120,5 +120,6 @@ def savePDFS3(data, audioName):
     try:
         # obj = s3.Object("apneasleepfiles", f"relatorio-{audioName}.pdf")
         # obj.delete()
+        pass
     except Exception as e:
         print(e)
