@@ -1,19 +1,7 @@
 import base64
-import os
 import io
 from pydub import AudioSegment
-import boto3
-
-#Retrieve ACCESS KEYS from enviroment
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
-
-#Set S3 Configuration
-s3 = boto3.resource(
-    "s3",
-    aws_access_key_id=AWS_ACCESS_KEY_ID,
-    aws_secret_access_key=AWS_SECRET_ACCESS_KEY
-    )
+from s3Utils import saveFileS3
 
 #Given encodedAudio and id's, save converted audio file to S3 bucket
 def saveAudioToS3(encodedAudio, username, audioId):
@@ -29,18 +17,17 @@ def saveAudioToS3(encodedAudio, username, audioId):
     wav = io.BytesIO()
 
     #Convert audio using pydub.AudioSegment
+    ##Declare de audio on it's native format
     sound2 = AudioSegment.from_file(audioFile, "m4a")
+    ##Convert it to other available format
     sound2.export(wav, format="wav")
 
-    #Search all buckets in account
-    for bucket in s3.buckets.all():
-        #Save audio (.WAV) in the container with the unique generated name
-        bucket.put_object(Key=audioKey, Body=wav.getvalue())
+    #Call method to save audio file to S3
+    saveFileS3("apneasleepbucket", audioKey, wav.getvalue())
     
     #Close Buffers
     wav.close()
     audioFile.close()
-
     return
 
 #Generate Audio Key (name for S3)

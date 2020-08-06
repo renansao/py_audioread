@@ -4,15 +4,15 @@ from flask import abort
 from readAudio import readAudio
 from glob import glob
 from transformText import transformToText
-from conversorB64toFile import conversorB64toFile
 from functools import wraps
 import jwt
-from audioAnalysis import analyseAudioService
+from audioController import analyseAudioController
 import sys
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "RraIY0negneEQzv3XO6kwjN4XVtsul1A"
 
+#General Function to check for a JWT token in the request
 def check_for_token(func):
     @wraps(func)
     def wrapped(*args, **kwargs):
@@ -25,7 +25,6 @@ def check_for_token(func):
             return jsonify({'errorMessage':'Token Inválido'}), 403
         return func(*args, **kwargs)
     return wrapped
-
 
 @app.route('/', methods=['GET'])
 def index():
@@ -53,38 +52,16 @@ def index():
 def analyseAudio():
     try:
         encodedAudio = request.json['encodedAudio']
-        #print("Base64: ", encodedAudio)
         audioId = request.json['audioId']
-
         token = request.args.get('token')
         tokenJson = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
         username = tokenJson.get('sub')
 
-        
-
     except Exception as e:
-        print("exp :", e)
+        print("Erro :", e)
         return jsonify({'errorMessage':e}), 400
         
-    return analyseAudioService(encodedAudio, audioId, username)
-
-@app.route('/convertToFile', methods=['POST'])
-@check_for_token
-def conversor():
-    if (not request.json) and (not request.json['base64']):
-        abort(400)
-    
-    base64 = request.json['base64']
-    audioId = request.json['audioId']
-    token = request.args.get('token')
-    tokenJson = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
-    username = tokenJson.get('sub')
-    
-    converted = conversorB64toFile(base64, audioId, username)
-    if converted:
-        return "Succesfully converted to file"
-    else:
-        return "An error occurred"
+    return analyseAudioController(encodedAudio, audioId, username)
 
 @app.route('/read', methods=['GET'])
 def generatePDF():
