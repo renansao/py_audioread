@@ -6,10 +6,10 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 
-def send_email():
+def send_email(receiverEmail, pdfName):
     sender_email = os.environ.get("EMAIL_APNEA_SLEEP")
     email_password = os.environ.get("PASSWORD_EMAIL_APNEA_SLEEP")
-    receiver_email = "gabrielbnetto@gmail.com"
+    receiver_email = receiverEmail
 
     message = MIMEMultipart()
     message["From"] = sender_email
@@ -17,7 +17,7 @@ def send_email():
     message["Bcc"] = receiver_email
     message["Subject"] = "ApneaSleep Relatório"
 
-    filename = "ApneaSleep - Relatorio.pdf" 
+    filename = pdfName
     body = "Olá. \n \n Aqui está o relatório que você solicitou! \n Qualquer dúvida ou problema, entre em contato! \n \n Ass: Equipe ApneaSleep"
 
     message.attach(MIMEText(body, "plain"))

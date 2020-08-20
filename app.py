@@ -29,24 +29,24 @@ def check_for_token(func):
 
 @app.route('/', methods=['GET'])
 def index():
-    send_email()
-    # return readAudio('teste', {
-    # "words": [
-    #     {
-    #         "endTime": "1.700s",
-    #         "startTime": "0.800s",
-    #         "word": "Renan"
-    #     },
-    #     {
-    #         "endTime": "2s",
-    #         "startTime": "1.700s",
-    #         "word": "Tô"
-    #     },
-    # ]
-    # }, 
-    # "Renan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim",
-    # "TESTE", 
-    # "13/07/2020")
+    readAudio('teste', {
+    "words": [
+        {
+            "endTime": "1.700s",
+            "startTime": "0.800s",
+            "word": "Renan"
+        },
+        {
+            "endTime": "2s",
+            "startTime": "1.700s",
+            "word": "Tô"
+        },
+    ]
+    }, 
+    "Renan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim",
+    "TESTE", 
+    "13/07/2020")
+    send_email("renan.biagiotti22@gmail.com", "ApneaSleep - Relatorio.pdf")
     return "Audio analysis API"
 
 @app.route('/analyseAudio', methods=['POST'])
