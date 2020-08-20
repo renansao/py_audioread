@@ -8,6 +8,7 @@ from functools import wraps
 import jwt
 from audioController import analyseAudioController
 import sys
+from sendEmail import send_email
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "RraIY0negneEQzv3XO6kwjN4XVtsul1A"
@@ -28,23 +29,24 @@ def check_for_token(func):
 
 @app.route('/', methods=['GET'])
 def index():
-    return readAudio('teste', {
-    "words": [
-        {
-            "endTime": "1.700s",
-            "startTime": "0.800s",
-            "word": "Renan"
-        },
-        {
-            "endTime": "2s",
-            "startTime": "1.700s",
-            "word": "Tô"
-        },
-    ]
-    }, 
-    "Renan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim",
-    "TESTE", 
-    "13/07/2020")
+    send_email()
+    # return readAudio('teste', {
+    # "words": [
+    #     {
+    #         "endTime": "1.700s",
+    #         "startTime": "0.800s",
+    #         "word": "Renan"
+    #     },
+    #     {
+    #         "endTime": "2s",
+    #         "startTime": "1.700s",
+    #         "word": "Tô"
+    #     },
+    # ]
+    # }, 
+    # "Renan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim",
+    # "TESTE", 
+    # "13/07/2020")
     return "Audio analysis API"
 
 @app.route('/analyseAudio', methods=['POST'])
