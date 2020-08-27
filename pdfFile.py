@@ -10,7 +10,7 @@ from botocore.client import Config
 
 def generatePDF(time, audio, maxAmp, maxAmpTime, minAmp, minAmpTime, totalTime, datas, speech, audioName, audioDate):
     data = []
-    datas = datas['words']
+    #datas = datas['words']
     date = datetime.now()
     calenderDate = str(date).split(" ")
     separetedDate = calenderDate[0].split("-")
@@ -63,6 +63,7 @@ def generatePDF(time, audio, maxAmp, maxAmpTime, minAmp, minAmpTime, totalTime, 
             pdf_reader = PdfFileReader(path)
             for page in range(pdf_reader.getNumPages()):
                 pdf_writer.addPage(pdf_reader.getPage(page))
+                
         with open(f"Relatorio-{audioName}.pdf", "wb") as fh:
             pdf_writer.write(fh)
             print("PDF Gerado com sucesso")

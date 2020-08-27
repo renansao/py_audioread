@@ -44,7 +44,7 @@ def transformToText(audioPath):
             audio = r.record(source)
             print("Convertendo Audio para Texto ..... ")
             
-            with open(r"credentials.json", "r") as f:
+            with open("credentials.json", "r") as f:
                 credentials_json = f.read()
                 result = r.recognize_google_cloud(audio,credentials_json=credentials_json,language="pt-BR",show_all=True)
                 words = result['results'][0]['alternatives'][0]['words']

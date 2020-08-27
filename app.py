@@ -28,7 +28,7 @@ def check_for_token(func):
 
 @app.route('/', methods=['GET'])
 def index():
-    return readAudio('teste', {
+    readAudio('teste', {
     "words": [
         {
             "endTime": "1.700s",
@@ -40,12 +40,17 @@ def index():
             "startTime": "1.700s",
             "word": "Tô"
         },
+        {
+            "endTime": "3s",
+            "startTime": "4.700s",
+            "word": "fazendo"
+        }
     ]
-    }, 
-    "Renan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruimRenan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim,Renan Tô testando agora e tem que funcionar se parar é porque você é ruim",
+    },
+    "Renan Tô fazendo",
     "TESTE", 
-    "13/07/2020")
-    return "Audio analysis API"
+    "21/08/2020")
+    return "", 200
 
 @app.route('/analyseAudio', methods=['POST'])
 @check_for_token
@@ -53,6 +58,7 @@ def analyseAudio():
     try:
         encodedAudio = request.json['encodedAudio']
         audioId = request.json['audioId']
+        audioName = request.json['audioName']
         token = request.args.get('token')
         tokenJson = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
         username = tokenJson.get('sub')
@@ -61,7 +67,7 @@ def analyseAudio():
         print("Erro :", e)
         return jsonify({'errorMessage':e}), 400
         
-    return analyseAudioController(encodedAudio, audioId, username)
+    return analyseAudioController(encodedAudio, audioId, username, audioName)
 
 @app.route('/read', methods=['GET'])
 def generatePDF():

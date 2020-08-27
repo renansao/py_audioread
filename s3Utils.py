@@ -1,5 +1,6 @@
 import boto3
 import os
+import io
 
 #Retrieve ACCESS KEYS from enviroment variables
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
@@ -16,3 +17,7 @@ s3 = boto3.client(
 def saveFileS3(bucketname, fileKey, fileData):
     s3.put_object(Bucket=bucketname, Key=fileKey, Body=fileData)
     return
+
+def retrieveS3File(bucketname, fileKey):
+    f = s3.get_object(Bucket=bucketname, Key=fileKey)
+    return f

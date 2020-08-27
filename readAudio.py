@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-#import librosa as lr
+import librosa as lr
 from glob import glob
 import base64
 from matplotlib.backends.backend_pdf import PdfPages
@@ -9,17 +9,14 @@ from pdfFile import generatePDF
 import boto3
 from botocore.client import Config
 
-def readAudio(audio_files, words, speech, audioName, audioDate):
+def readAudio(audioBytes, words, speech, audioName, audioDate):
 
     # print(len(audio_files))
     try:
-        
-        with open("audio_file/teste.m4a", "wb") as fh:
-            print("TA LENDO")
 
-        audio, sfreq = lr.load("audio_file/teste@gsmail.com/12345.wav") 
+        audio, sfreq = lr.load(audioBytes, sr=44100)
         totalTime = lr.get_duration(y=audio, sr=sfreq)
-
+    
         # print("audio file : ", audio_files[4])
 
         time = np.arange(0,len(audio)) / sfreq
