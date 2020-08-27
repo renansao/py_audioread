@@ -8,6 +8,7 @@ from functools import wraps
 import jwt
 from audioController import analyseAudioController
 import sys
+from sendEmail import send_email
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "RraIY0negneEQzv3XO6kwjN4XVtsul1A"
@@ -49,8 +50,9 @@ def index():
     },
     "Renan Tô fazendo",
     "TESTE", 
-    "21/08/2020")
-    return "", 200
+    "13/07/2020")
+    send_email("renan.biagiotti22@gmail.com", "ApneaSleep - Relatorio.pdf")
+    return "Audio analysis API"
 
 @app.route('/analyseAudio', methods=['POST'])
 @check_for_token
