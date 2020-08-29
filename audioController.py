@@ -12,17 +12,19 @@ def analyseAudioController(encodedAudio, audioId, username, audioName):
 
     try:
         #Save converted audio (.WAV) to S3 container.
-        wavAudio = saveAudioToS3(encodedAudio, username, audioId)
+        wavAudio = saveAudioToS3(encodedAudio, username, audioId, audioName)
 
         #Analyse the possible speech and return a JSON String
         analysisResult = analiseSpeech(wavAudio)
 
         #Generate PDF with audio details
-        readAudio(wavAudio,
+        pdf = readAudio(wavAudio,
         analysisResult['results'][0]['alternatives'][0]['words'],
         analysisResult['results'][0]['alternatives'][0]['transcript'],
         audioName,
-        str((datetime.datetime.now()).strftime("%x")))
+        str((datetime.datetime.now()).strftime("%x")),
+        username,
+        audioId)
 
         #Call JAVA API to save
         

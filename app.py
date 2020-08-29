@@ -50,7 +50,9 @@ def index():
     },
     "Renan Tô fazendo",
     "TESTE", 
-    "13/07/2020")
+    "13/07/2020",
+    "teste",
+    "teste")
     send_email("renan.biagiotti22@gmail.com", "ApneaSleep - Relatorio.pdf")
     return "Audio analysis API"
 
@@ -86,7 +88,7 @@ def generatePDF():
     tokenJson = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
     username = tokenJson.get('sub')
 
-    return readAudio("", words, speech, audioName, audioDate)
+    return readAudio("", words, speech, audioName, audioDate, "", "")
 
 if __name__ == '__main__':
     app.run(debug=True)

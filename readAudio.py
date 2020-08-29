@@ -13,7 +13,7 @@ import wave as wave
 from io import BytesIO
 from scipy.io.wavfile import read
 
-def readAudio(audioWav, words, speech, audioName, audioDate):
+def readAudio(audioWav, words, speech, audioName, audioDate, username, audioId):
 
     # print(len(audio_files))
     try:
@@ -38,14 +38,17 @@ def readAudio(audioWav, words, speech, audioName, audioDate):
         ax.set_ylabel("Amplitude do Som", fontsize=15)
         ax.set_xlabel("Tempo(s)", fontsize=15)
         
-        with PdfPages('audioGraf.pdf') as pdf:
+
+        audioGraf = BytesIO()
+
+        with PdfPages(audioGraf) as pdf:
             F = plt.gcf()
             Size = F.get_size_inches()
             F.set_size_inches(8.5, 11, forward=True)
             plt.title("Gráfico do Audio", fontdict={'fontsize': 25, 'fontweight': 'bold'})
             pdf.savefig()
 
-        generatePDF(time, audio, max(audio), list(time)[list(audio).index(max(audio))], min(audio), list(time)[list(audio).index(min(audio))], totalTime, words, speech, audioName, audioDate)
+        generatePDF(time, audio, max(audio), list(time)[list(audio).index(max(audio))], min(audio), list(time)[list(audio).index(min(audio))], totalTime, words, speech, audioName, audioDate, audioGraf, username, audioId)
 
     except Exception as e:
         print("Analysis Error:",e)

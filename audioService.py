@@ -9,11 +9,11 @@ from s3Utils import retrieveS3File
 from scipy.io.wavfile import read, write
 
 #Given encodedAudio and id's, save converted audio file to S3 bucket
-def saveAudioToS3(encodedAudio, username, audioId):
+def saveAudioToS3(encodedAudio, username, audioId, audioName):
 
     try:
         #Generate Audio Key (name for S3)
-        audioKey = generateAudioKey(username, audioId, ".wav")
+        audioKey = generateFileKey(username, audioId, ".wav", audioName)
 
         #Create M4A file base on B64 received in the request
         decodedAudio = base64.b64decode(encodedAudio)
@@ -29,7 +29,7 @@ def saveAudioToS3(encodedAudio, username, audioId):
         sound2.export(wav, format="wav")
 
         #Call method to save audio file to S3
-        #saveFileS3("apneasleepbucket", audioKey, wav.getvalue())
+        saveFileS3("apneasleepbucket", audioKey, wav.getvalue())
         
         #Close Buffer
         audioFile.close()
@@ -71,7 +71,7 @@ def analiseSpeech(audioWav):
 
 
 #Generate Audio Key (name for S3)
-def generateAudioKey(username, audioId, extension):
+def generateFileKey(username, audioId, extension, audioName):
 
-    key = "user/" + "audio" + "/" + username + "/" + audioId + extension
+    key = "user/" + username +"/" + audioId + "/" + audioName + extension
     return key

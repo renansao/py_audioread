@@ -7,8 +7,11 @@ from reportlab.platypus.tables import Table
 from textwrap import wrap
 import boto3
 from botocore.client import Config
+from io import BytesIO
+from audioService import generateFileKey
+from s3Utils import saveFileS3
 
-def generatePDF(time, audio, maxAmp, maxAmpTime, minAmp, minAmpTime, totalTime, datas, speech, audioName, audioDate):
+def generatePDF(time, audio, maxAmp, maxAmpTime, minAmp, minAmpTime, totalTime, datas, speech, audioName, audioDate, audioGraf, username, audioId):
     data = []
     #datas = datas['words']
     date = datetime.now()
@@ -17,7 +20,8 @@ def generatePDF(time, audio, maxAmp, maxAmpTime, minAmp, minAmpTime, totalTime, 
     formattedDate = separetedDate[2]+"/"+separetedDate[1]+"/"+separetedDate[0]
 
     try:
-        pdf = Canvas('Relatorio.pdf', pagesize=LETTER)
+        relatorio = BytesIO()
+        pdf = Canvas(relatorio, pagesize=LETTER)
         pdf.setFont("Helvetica-Bold", 20)
         pdf.drawString(190,740, 'Relatório da Análise de Audio')
         pdf.drawInlineImage("apnealogo.png", -20, 645, 200, 180)
@@ -25,7 +29,7 @@ def generatePDF(time, audio, maxAmp, maxAmpTime, minAmp, minAmpTime, totalTime, 
         pdf.drawString(520,750, 'Gerado em:')
         pdf.drawString(520,738, formattedDate)
         pdf.line(20, 690, 585, 690)
-        
+
         pdf.setFont("Helvetica-Bold", 16)
         pdf.drawString(230,670, 'Dados do Audio')
         pdf.setFont("Helvetica", 14)
@@ -55,18 +59,28 @@ def generatePDF(time, audio, maxAmp, maxAmpTime, minAmp, minAmpTime, totalTime, 
         data.insert(0, ("Palavra", "Tempo de Início\n(segundos)", "Tempo de fim\n(segundos)"))
 
         table = generateTable(data)
-        newPdfs = generateNewPDF(table, 0, [], (speechy-50), (speechy- 20), pdf, True)
+
+        newPdfs = []
         
+        generateNewPDF(table, 0, [], (speechy-50), (speechy- 20), pdf, newPdfs, relatorio)
         pdf_writer = PdfFileWriter()
-        newPdfs.append("audioGraf.pdf")
+        
+        newPdfs.append(audioGraf)
+
         for path in newPdfs:
             pdf_reader = PdfFileReader(path)
             for page in range(pdf_reader.getNumPages()):
                 pdf_writer.addPage(pdf_reader.getPage(page))
-                
-        with open(f"Relatorio-{audioName}.pdf", "wb") as fh:
-            pdf_writer.write(fh)
+        
+        relatorioFinal = BytesIO()
+        with relatorioFinal as pdf:
+            pdf_writer.write(pdf)
             print("PDF Gerado com sucesso")
+            #Generate file key for pdf
+            fileKey = generateFileKey(username, audioId, ".pdf", audioName)
+            #Call method to save audio file to S3
+            saveFileS3("apneasleepbucket", fileKey, pdf.getvalue())
+
         savePDFS3(open(f'Relatorio-{audioName}.pdf', 'rb'), audioName)
     except Exception as e:
         print(e)
@@ -83,12 +97,10 @@ def generateTable(data):
   ]))
   return table
 
-def generateNewPDF(table, number, pdfs, tablesplit, speechy, pdf, newPdf):
-    if(newPdf == False):
-        pdfName = f'Relatorio{number}.pdf'
-    else:
-        pdfName = 'Relatorio.pdf'
-    pdfs.append(pdfName)
+def generateNewPDF(table, number, pdfs, tablesplit, speechy, pdf, newPdfs, pdfBytes):
+
+    newPdfs.append(pdfBytes)
+
     wordsListR = []
     words = table.split(10, tablesplit)
     speechY2 = speechy
@@ -110,12 +122,16 @@ def generateNewPDF(table, number, pdfs, tablesplit, speechy, pdf, newPdf):
         wordsListR[0].drawOn(pdf, 320, speechY2)
     pdf.save()
 
+    
     if(len(wordsListR) > 1):
         number += 1
-        nextPDFName = f"Relatorio{str(number)}.pdf"
-        generateNewPDF(wordsListR[1], number, pdfs, (int(A4) - 100), 770, Canvas(nextPDFName, pagesize=LETTER), False)
+        nextPDF = BytesIO()
+        generateNewPDF(wordsListR[1], number, pdfs, (int(A4) - 100), 770, Canvas(nextPDF, pagesize=LETTER), newPdfs, nextPDF)
+        return 
+    
+    return
 
-    return pdfs
+   
 
 def savePDFS3(data, audioName):
     try:
