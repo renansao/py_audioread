@@ -6,6 +6,7 @@ import speech_recognition as sr
 import json
 from flask import jsonify
 from s3Utils import retrieveS3File
+from scipy.io.wavfile import read, write
 
 #Given encodedAudio and id's, save converted audio file to S3 bucket
 def saveAudioToS3(encodedAudio, username, audioId):

@@ -8,17 +8,18 @@ from matplotlib.backends.backend_pdf import PdfPages
 from pdfFile import generatePDF
 import boto3
 from botocore.client import Config
+import numpy as np
+import wave as wave
+from io import BytesIO
+from scipy.io.wavfile import read
 
-def readAudio(audioBytes, words, speech, audioName, audioDate):
+def readAudio(audioWav, words, speech, audioName, audioDate):
 
     # print(len(audio_files))
     try:
-
-        audio, sfreq = lr.load(audioBytes, sr=44100)
+        audio, sfreq = lr.load(BytesIO(audioWav.getvalue()))
         totalTime = lr.get_duration(y=audio, sr=sfreq)
-    
-        # print("audio file : ", audio_files[4])
-
+        
         time = np.arange(0,len(audio)) / sfreq
 
         print("Time: ", time)

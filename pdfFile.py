@@ -25,7 +25,7 @@ def generatePDF(time, audio, maxAmp, maxAmpTime, minAmp, minAmpTime, totalTime, 
         pdf.drawString(520,750, 'Gerado em:')
         pdf.drawString(520,738, formattedDate)
         pdf.line(20, 690, 585, 690)
-
+        
         pdf.setFont("Helvetica-Bold", 16)
         pdf.drawString(230,670, 'Dados do Audio')
         pdf.setFont("Helvetica", 14)
