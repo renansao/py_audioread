@@ -33,13 +33,13 @@ def generatePDF(time, audio, maxAmp, maxAmpTime, minAmp, minAmpTime, totalTime, 
         pdf.setFont("Helvetica-Bold", 16)
         pdf.drawString(230,670, 'Dados do Audio')
         pdf.setFont("Helvetica", 14)
-        pdf.drawString(22,650, 'Nome do Audio: ')
-        pdf.drawString(22,630, 'Data de envio: ')
-        pdf.drawString(22,610, f'Tempo Total do audio: {totalTime} segundos')
-        pdf.drawString(22,590, f'Amplitude máxima: {str(maxAmp)}')
-        pdf.drawString(22,570, f'Tempo da amplitude máxima: {str(maxAmpTime)} segundos')
-        pdf.drawString(22,550, f'Amplitude mínima: {str(minAmp)}')
-        pdf.drawString(22,530, f'Tempo da amplitude mínima: {str(minAmpTime)} segundos')
+        pdf.drawString(22,650, f'Nome do Audio: {audioName}')
+        pdf.drawString(22,630, f'Data de envio: {audioDate}')
+        pdf.drawString(22,610, f'Tempo Total do audio: {format(totalTime,".2f")} segundos')
+        pdf.drawString(22,590, f'Amplitude máxima: {str(format(maxAmp,".2f"))}')
+        pdf.drawString(22,570, f'Tempo da amplitude máxima: {str(format(maxAmpTime, ".2f"))} segundos')
+        pdf.drawString(22,550, f'Amplitude mínima: {str(format(minAmp,".2f"))}')
+        pdf.drawString(22,530, f'Tempo da amplitude mínima: {str(format(minAmpTime,".2f"))} segundos')
         pdf.line(20, 510, 585, 510)
 
         pdf.setFont("Helvetica-Bold", 16)
@@ -55,6 +55,7 @@ def generatePDF(time, audio, maxAmp, maxAmpTime, minAmp, minAmpTime, totalTime, 
         
         for json in datas:
             data.append((json['word'], json['startTime'], json['endTime']))
+            print(json['word'], json['startTime'], json['endTime'])
 
         data.insert(0, ("Palavra", "Tempo de Início\n(segundos)", "Tempo de fim\n(segundos)"))
 
@@ -81,7 +82,8 @@ def generatePDF(time, audio, maxAmp, maxAmpTime, minAmp, minAmpTime, totalTime, 
             #Call method to save audio file to S3
             saveFileS3("apneasleepbucket", fileKey, pdf.getvalue())
 
-        savePDFS3(open(f'Relatorio-{audioName}.pdf', 'rb'), audioName)
+        return fileKey
+        
     except Exception as e:
         print(e)
         return 'Erro ao gerar PDF'
@@ -126,17 +128,7 @@ def generateNewPDF(table, number, pdfs, tablesplit, speechy, pdf, newPdfs, pdfBy
     if(len(wordsListR) > 1):
         number += 1
         nextPDF = BytesIO()
-        generateNewPDF(wordsListR[1], number, pdfs, (int(A4) - 100), 770, Canvas(nextPDF, pagesize=LETTER), newPdfs, nextPDF)
+        generateNewPDF(wordsListR[1], number, pdfs, (int(A4[1]) - 100), 770, Canvas(nextPDF, pagesize=LETTER), newPdfs, nextPDF)
         return 
     
     return
-
-   
-
-def savePDFS3(data, audioName):
-    try:
-        # obj = s3.Object("apneasleepfiles", f"relatorio-{audioName}.pdf")
-        # obj.delete()
-        pass
-    except Exception as e:
-        print(e)

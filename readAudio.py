@@ -48,7 +48,9 @@ def readAudio(audioWav, words, speech, audioName, audioDate, username, audioId):
             plt.title("Gráfico do Audio", fontdict={'fontsize': 25, 'fontweight': 'bold'})
             pdf.savefig()
 
-        generatePDF(time, audio, max(audio), list(time)[list(audio).index(max(audio))], min(audio), list(time)[list(audio).index(min(audio))], totalTime, words, speech, audioName, audioDate, audioGraf, username, audioId)
+
+        pdfKey = generatePDF(time, audio, max(audio), list(time)[list(audio).index(max(audio))], min(audio), list(time)[list(audio).index(min(audio))], totalTime, words, speech, audioName, audioDate, audioGraf, username, audioId)
+        return pdfKey
 
     except Exception as e:
         print("Analysis Error:",e)

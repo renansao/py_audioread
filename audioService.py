@@ -6,7 +6,7 @@ import speech_recognition as sr
 import json
 from flask import jsonify
 from s3Utils import retrieveS3File
-from scipy.io.wavfile import read, write
+from scipy.io import wavfile
 
 #Given encodedAudio and id's, save converted audio file to S3 bucket
 def saveAudioToS3(encodedAudio, username, audioId, audioName):
@@ -35,7 +35,7 @@ def saveAudioToS3(encodedAudio, username, audioId, audioName):
         audioFile.close()
 
         #Return wav
-        return wav
+        return wav, audioKey
     
     except Exception as e:
         print(e)
@@ -54,15 +54,20 @@ def analiseSpeech(audioWav):
 
     try:
         #Get wav audio bytes and instaciate a AudioData Object
-        audio = sr.AudioData(audioWav.getvalue(), 44100, 4)
+        samplerate, data = wavfile.read(io.BytesIO(audioWav.getvalue()))
+        audio = sr.AudioData(audioWav.getvalue(), samplerate, data.dtype.itemsize)
         
         print("Convertendo Audio para Texto ..... ")
 
         #Call Google Cloud API to try to find a speech on it
         result = r.recognize_google_cloud(audio,credentials_json=credentialsStr,language="pt-BR",show_all=True)
         
+        hasSpoken = True
+        if len(result) == 0:
+            hasSpoken = False
+
         #Return JSON string of the speech analysis result
-        return result
+        return result, hasSpoken
     
     except Exception as e:
         print(e)

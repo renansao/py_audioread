@@ -45,6 +45,19 @@ def index():
             "endTime": "3s",
             "startTime": "4.700s",
             "word": "fazendo"
+        },
+                {
+            "endTime": "3s",
+            "startTime": "4.700s",
+            "word": "fazendo"
+        },        {
+            "endTime": "3s",
+            "startTime": "4.700s",
+            "word": "fazendo"
+        },        {
+            "endTime": "3s",
+            "startTime": "4.700s",
+            "word": "fazendo"
         }
     ]
     },
@@ -53,7 +66,7 @@ def index():
     "13/07/2020",
     "teste",
     "teste")
-    send_email("renan.biagiotti22@gmail.com", "ApneaSleep - Relatorio.pdf")
+    #send_email("renan.biagiotti22@gmail.com", "ApneaSleep - Relatorio.pdf")
     return "Audio analysis API"
 
 @app.route('/analyseAudio', methods=['POST'])

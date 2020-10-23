@@ -26,7 +26,7 @@ def send_email(receiverEmail, pdfName):
         pdfData = attachment.read()
     
     part = MIMEApplication(pdfData, _subtype="pdf", _encoder=encoders.encode_base64)
-    part.add_header('content-disposition', 'attachment',  filename= filename)
+    part.add_header('content-disposition', 'attachment',  filename=filename)
     message.attach(part)
     
     context = ssl.create_default_context()
